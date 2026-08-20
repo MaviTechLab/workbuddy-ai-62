@@ -33,10 +33,10 @@ function buildPrompt(data: AssistantInput): string {
   const o = data.options;
   if (data.tool === "email") {
     return [
-      `Tone: ${o.tone ?? "Professional"}`,
-      `Length: ${o.length ?? "Standard"}`,
-      o.recipient ? `Recipient: ${o.recipient}` : null,
-      o.sender ? `Sender / sign-off name: ${o.sender}` : null,
+      `Tone: ${o['tone'] ?? "Professional"}`,
+      `Length: ${o['length'] ?? "Standard"}`,
+      o['recipient'] ? `Recipient: ${o['recipient']}` : null,
+      o['sender'] ? `Sender / sign-off name: ${o['sender']}` : null,
       "",
       "Context and goal of the email:",
       data.input,
@@ -46,17 +46,17 @@ function buildPrompt(data: AssistantInput): string {
   }
   if (data.tool === "summary") {
     return [
-      `Meeting title: ${o.title || "Untitled meeting"}`,
-      `Detail level: ${o.detail ?? "Balanced"}`,
+      `Meeting title: ${o['title'] || "Untitled meeting"}`,
+      `Detail level: ${o['detail'] ?? "Balanced"}`,
       "",
       "Raw notes / transcript:",
       data.input,
     ].join("\n");
   }
   return [
-    `Plan horizon: ${o.horizon ?? "Daily"}`,
-    `Working hours: ${o.hours || "09:00-17:00"}`,
-    `Working style: ${o.style ?? "Balanced"}`,
+    `Plan horizon: ${o['horizon'] ?? "Daily"}`,
+    `Working hours: ${o['hours'] || "09:00-17:00"}`,
+    `Working style: ${o['style'] ?? "Balanced"}`,
     "",
     "Tasks, goals and constraints:",
     data.input,
