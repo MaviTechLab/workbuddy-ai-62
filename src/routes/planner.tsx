@@ -99,7 +99,7 @@ function AiTaskPlanner() {
           error={error}
           onRegenerate={run}
           onReset={resetOutput}
-          emptyHint="Your schedule appears here as a prioritized, time-blocked plan — daily or weekly, with High/Moderate/Low priorities and a risks section."
+          emptyHint="Your schedule appears here as a prioritized plan — daily or weekly, with High/Moderate/Low priorities and a risks section."
           disclaimer={DISCLAIMER}
         />
       </div>
