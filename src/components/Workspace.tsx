@@ -107,13 +107,24 @@ export function InputPanel({
 
       <div className="space-y-4">
         {children}
-        <button
-          onClick={onGenerate}
-          disabled={loading || disabled}
-          className="w-full cursor-pointer rounded-lg bg-foreground py-3 font-semibold text-background shadow-lg transition-all hover:bg-foreground/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {loading ? "Generating…" : actionLabel}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={onGenerate}
+            disabled={loading || disabled}
+            className="flex-1 cursor-pointer rounded-lg bg-foreground py-3 font-semibold text-background shadow-lg transition-all hover:bg-foreground/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {loading ? "Generating…" : actionLabel}
+          </button>
+          {onReset ? (
+            <button
+              onClick={onReset}
+              disabled={loading}
+              className="cursor-pointer rounded-lg border border-border bg-card px-6 py-3 font-semibold text-muted-foreground transition-all hover:bg-foreground/5 hover:text-foreground active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Reset
+            </button>
+          ) : null}
+        </div>
       </div>
     </section>
   );
