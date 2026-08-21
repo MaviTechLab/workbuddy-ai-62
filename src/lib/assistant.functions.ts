@@ -54,14 +54,7 @@ function buildPrompt(data: AssistantInput): string {
   if (data.tool === "summary") {
     return ["Raw notes / transcript:", data.input].join("\n");
   }
-  return [
-    `Plan horizon: ${o['horizon'] ?? "Daily"}`,
-    `Working hours: ${o['hours'] || "09:00-17:00"}`,
-    `Working style: ${o['style'] ?? "Balanced"}`,
-    "",
-    "Tasks, goals and constraints:",
-    data.input,
-  ].join("\n");
+  return ["Tasks, goals and constraints:", data.input].join("\n");
 }
 
 export const generateAssistantOutput = createServerFn({ method: "POST" })
