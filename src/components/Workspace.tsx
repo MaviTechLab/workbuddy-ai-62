@@ -87,6 +87,7 @@ export function InputPanel({
   loading,
   disabled,
   actionLabel,
+  onReset,
 }: {
   title: string;
   subtitle: string;
@@ -95,6 +96,7 @@ export function InputPanel({
   loading: boolean;
   disabled: boolean;
   actionLabel: string;
+  onReset?: () => void;
 }) {
   return (
     <section className="animate-slide-up w-full space-y-6 lg:col-span-5">
@@ -105,13 +107,24 @@ export function InputPanel({
 
       <div className="space-y-4">
         {children}
-        <button
-          onClick={onGenerate}
-          disabled={loading || disabled}
-          className="w-full cursor-pointer rounded-lg bg-foreground py-3 font-semibold text-background shadow-lg transition-all hover:bg-foreground/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {loading ? "Generating…" : actionLabel}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={onGenerate}
+            disabled={loading || disabled}
+            className="flex-1 cursor-pointer rounded-lg bg-foreground py-3 font-semibold text-background shadow-lg transition-all hover:bg-foreground/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {loading ? "Generating…" : actionLabel}
+          </button>
+          {onReset ? (
+            <button
+              onClick={onReset}
+              disabled={loading}
+              className="cursor-pointer rounded-lg border border-border bg-card px-6 py-3 font-semibold text-muted-foreground transition-all hover:bg-foreground/5 hover:text-foreground active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Reset
+            </button>
+          ) : null}
+        </div>
       </div>
     </section>
   );
@@ -125,6 +138,7 @@ export function OutputPanel({
   error,
   emptyHint,
   onRegenerate,
+  onReset,
   disclaimer,
 }: {
   badge: string;
@@ -134,6 +148,7 @@ export function OutputPanel({
   error: string | null;
   emptyHint: string;
   onRegenerate: () => void;
+  onReset?: () => void;
   disclaimer: string;
 }) {
   const [copied, setCopied] = useState(false);
@@ -174,6 +189,15 @@ export function OutputPanel({
             >
               <span className="px-1">{copied ? "Copied" : "Copy"}</span>
             </button>
+            {onReset ? (
+              <button
+                onClick={onReset}
+                disabled={!value || loading}
+                className="rounded p-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-40"
+              >
+                <span className="px-1">Reset</span>
+              </button>
+            ) : null}
           </div>
         </div>
 

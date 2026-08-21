@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 const NAV = [
-  { to: "/", label: "Email Architect", short: "Email" },
+  { to: "/", label: "Smart Email Generator", short: "Email" },
   { to: "/summarizer", label: "Minute Master", short: "Notes" },
   { to: "/planner", label: "Pulse Planner", short: "Plan" },
 ] as const;

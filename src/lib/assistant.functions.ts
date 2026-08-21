@@ -14,6 +14,9 @@ export type AssistantInput = z.infer<typeof AssistantInput>;
 const SYSTEM: Record<AssistantInput["tool"], string> = {
   email:
     "You are a workplace communication assistant. Write complete, ready-to-send professional emails. " +
+    "Infer the appropriate tone (formal, friendly, persuasive, apologetic or direct) from the pasted email or the described situation, " +
+    "honouring any tone the user states explicitly. " +
+    "Also infer the right email length — concise, standard or detailed — from the depth and complexity of the provided context. " +
     "Always start with a 'Subject:' line, then the greeting, body paragraphs and a sign-off. " +
     "Never invent facts, figures, names or commitments that were not provided; use neutral placeholders like [Name] instead. " +
     "Return plain text only, no markdown fences or commentary.",
@@ -33,8 +36,8 @@ function buildPrompt(data: AssistantInput): string {
   const o = data.options;
   if (data.tool === "email") {
     return [
-      `Tone: ${o['tone'] ?? "Professional"}`,
-      `Length: ${o['length'] ?? "Standard"}`,
+      o['tone'] ? `Tone: ${o['tone']}` : "Tone: infer from the context below",
+      o['length'] ? `Length: ${o['length']}` : "Length: infer from the context below (concise, standard or detailed)",
       o['recipient'] ? `Recipient: ${o['recipient']}` : null,
       o['sender'] ? `Sender / sign-off name: ${o['sender']}` : null,
       "",
