@@ -220,4 +220,4 @@ export function OutputPanel({
 }
 
 export const DISCLAIMER =
-  "AI content can be inaccurate. Please review and verify every generated output before sending, sharing or acting on it. Sentinel is designed for workplace assistance and does not represent final legal, financial or binding intent. Do not paste confidential personal data.";
+  "AI content can be inaccurate. Please review and verify every generated output before sending, sharing or acting on it. AI Workplace Productivity Assistant is designed for workplace assistance and does not represent final legal, financial or binding intent. Do not paste confidential personal data.";

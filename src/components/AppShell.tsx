@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex size-8 items-center justify-center rounded bg-primary">
             <div className="size-4 rounded-sm border-2 border-primary-foreground" />
           </div>
-          <span className="text-xl font-extrabold tracking-tighter">SENTINEL</span>
+          <span className="text-xl font-extrabold tracking-tighter">AI WORKPLACE</span>
         </div>
 
         <nav className="flex-1 space-y-1 px-4">

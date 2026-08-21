@@ -16,13 +16,13 @@ import { generateAssistantOutput } from "@/lib/assistant.functions";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Email Architect | Sentinel AI Workplace Assistant" },
+      { title: "Email Architect | AI Workplace Productivity Assistant" },
       {
         name: "description",
         content:
           "Generate professional emails in any tone — formal, friendly or persuasive — then edit the AI draft before you send it.",
       },
-      { property: "og:title", content: "Email Architect | Sentinel AI Workplace Assistant" },
+      { property: "og:title", content: "Email Architect | AI Workplace Productivity Assistant" },
       {
         property: "og:description",
         content:

@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Sentinel | AI Workplace Productivity Assistant" },
+      { title: "AI Workplace Productivity Assistant" },
       {
         name: "description",
         content:
-          "Sentinel automates workplace writing and planning: draft emails, summarize meeting notes and build prioritized schedules with AI.",
+          "AI Workplace Productivity Assistant automates workplace writing and planning: draft emails, summarize meeting notes and build prioritized schedules with AI.",
       },
-      { property: "og:title", content: "Sentinel | AI Workplace Productivity Assistant" },
+      { property: "og:title", content: "AI Workplace Productivity Assistant" },
       {
         property: "og:description",
         content:
