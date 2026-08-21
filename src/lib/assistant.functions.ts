@@ -28,9 +28,11 @@ const SYSTEM: Record<AssistantInput["tool"], string> = {
     "Use '- ' bullets under each heading. Action items use the form '- [Owner] Task'. Deadlines use '- [Date] What is due'. " +
     "If a section has nothing in the source, write '- None identified'. Never invent owners or dates.",
   planner:
-    "You are a task planning assistant. Turn a list of tasks and constraints into a realistic, time-blocked schedule. " +
-    "Return plain text. For each day use a heading line like 'MONDAY' or 'TODAY', then time-blocked rows in the form " +
-    "'- 09:00-10:30 | P1 | Task — why it is placed here'. Priorities are P1 (critical), P2 (important), P3 (nice to have). " +
+    "You are a task planning assistant. Turn a list of tasks, goals and constraints into a realistic, time-blocked schedule. " +
+    "Infer whether the user needs a daily or weekly schedule from the content and time constraints provided. " +
+    "Infer each task's priority as High, Moderate or Low based on urgency, deadlines, impact and dependencies stated in the input. " +
+    "Return plain text. For each day use a heading line like 'TODAY' or 'MONDAY', then time-blocked rows in the form " +
+    "'- 09:00-10:30 | High | Task — why it is placed here'. Priorities are High (critical), Moderate (important), Low (nice to have). " +
     "Front-load deep work, group shallow tasks, include breaks, and end with a 'RISKS' section listing overload or conflicts.",
 };
 
@@ -52,14 +54,7 @@ function buildPrompt(data: AssistantInput): string {
   if (data.tool === "summary") {
     return ["Raw notes / transcript:", data.input].join("\n");
   }
-  return [
-    `Plan horizon: ${o['horizon'] ?? "Daily"}`,
-    `Working hours: ${o['hours'] || "09:00-17:00"}`,
-    `Working style: ${o['style'] ?? "Balanced"}`,
-    "",
-    "Tasks, goals and constraints:",
-    data.input,
-  ].join("\n");
+  return ["Tasks, goals and constraints:", data.input].join("\n");
 }
 
 export const generateAssistantOutput = createServerFn({ method: "POST" })

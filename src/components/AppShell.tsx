@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 const NAV = [
   { to: "/", label: "Smart Email Generator", short: "Email" },
   { to: "/summarizer", label: "Meeting Notes Summariser", short: "Notes" },
-  { to: "/planner", label: "Pulse Planner", short: "Plan" },
+  { to: "/planner", label: "AI Task Planner", short: "Plan" },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
