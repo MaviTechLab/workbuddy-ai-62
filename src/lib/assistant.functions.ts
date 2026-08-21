@@ -50,13 +50,7 @@ function buildPrompt(data: AssistantInput): string {
       .join("\n");
   }
   if (data.tool === "summary") {
-    return [
-      `Meeting title: ${o['title'] || "Untitled meeting"}`,
-      `Detail level: ${o['detail'] ?? "Balanced"}`,
-      "",
-      "Raw notes / transcript:",
-      data.input,
-    ].join("\n");
+    return ["Raw notes / transcript:", data.input].join("\n");
   }
   return [
     `Plan horizon: ${o['horizon'] ?? "Daily"}`,
