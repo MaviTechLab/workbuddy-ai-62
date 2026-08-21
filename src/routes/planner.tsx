@@ -7,46 +7,49 @@ import {
   Field,
   InputPanel,
   OutputPanel,
-  Select,
   TextArea,
-  TextInput,
 } from "@/components/Workspace";
 import { generateAssistantOutput } from "@/lib/assistant.functions";
 
 export const Route = createFileRoute("/planner")({
   head: () => ({
     meta: [
-      { title: "Pulse Planner | AI Task Scheduler" },
+      { title: "AI Task Planner | AI Workplace Productivity Assistant" },
       {
         name: "description",
         content:
-          "Turn a messy task list into a prioritized, time-blocked daily or weekly schedule you can edit and copy.",
+          "Turn a list of tasks and goals into a prioritized daily or weekly schedule with automatically assigned priorities.",
       },
-      { property: "og:title", content: "Pulse Planner | AI Task Scheduler" },
+      { property: "og:title", content: "AI Task Planner | AI Workplace Productivity Assistant" },
       {
         property: "og:description",
         content:
-          "Turn a messy task list into a prioritized, time-blocked daily or weekly schedule you can edit and copy.",
+          "Turn a list of tasks and goals into a prioritized daily or weekly schedule with automatically assigned priorities.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: PulsePlanner,
+  component: AiTaskPlanner,
 });
 
-const HORIZONS = ["Daily", "Weekly"] as const;
-const STYLES = ["Balanced", "Deep work first", "Quick wins first", "Meeting heavy"] as const;
-
-function PulsePlanner() {
+function AiTaskPlanner() {
   const generate = useServerFn(generateAssistantOutput);
   const [tasks, setTasks] = useState("");
-  const [horizon, setHorizon] = useState<string>("Daily");
-  const [hours, setHours] = useState("09:00-17:00");
-  const [style, setStyle] = useState<string>("Balanced");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const resetAll = () => {
+    setTasks("");
+    setOutput("");
+    setError(null);
+  };
+
+  const resetOutput = () => {
+    setOutput("");
+    setError(null);
+  };
 
   const run = async () => {
     if (!tasks.trim()) return;
@@ -54,7 +57,7 @@ function PulsePlanner() {
     setError(null);
     try {
       const result = await generate({
-        data: { tool: "planner", input: tasks, options: { horizon, hours, style } },
+        data: { tool: "planner", input: tasks, options: {} },
       });
       setOutput(result.text);
     } catch (e) {
@@ -69,34 +72,22 @@ function PulsePlanner() {
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-8 lg:grid lg:grid-cols-12">
         <InputPanel
           title="Build your schedule"
-          subtitle="List your tasks and constraints — get a prioritized, time-blocked plan."
+          subtitle="List your tasks and goals — the AI will infer daily or weekly scheduling and assign High, Moderate or Low priorities."
           onGenerate={run}
           loading={loading}
           disabled={!tasks.trim()}
           actionLabel="Generate Schedule"
+          onReset={resetAll}
         >
           <Field label="Tasks, Goals & Constraints">
             <TextArea
-              rows={11}
+              rows={14}
               value={tasks}
               onChange={setTasks}
               placeholder={
-                "One per line, e.g.\nFinish Q3 budget deck (due Thursday)\nInterview two candidates\n1:1 with Priya, 30 min\nReview vendor contract"
+                "One per line, e.g.\nFinish Q3 budget deck (due Thursday)\nInterview two candidates\n1:1 with Priya, 30 min\nReview vendor contract\n\n- Tasks and goals written here are used to generate daily or weekly schedules.\n- Generate daily or weekly schedules based on what is written above.\n- Priorities are determined automatically as High, Moderate or Low based on what is written."
               }
             />
-          </Field>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Horizon">
-              <Select value={horizon} onChange={setHorizon} options={HORIZONS} />
-            </Field>
-            <Field label="Working Hours">
-              <TextInput value={hours} onChange={setHours} placeholder="09:00-17:00" />
-            </Field>
-          </div>
-
-          <Field label="Working Style">
-            <Select value={style} onChange={setStyle} options={STYLES} />
           </Field>
         </InputPanel>
 
@@ -107,7 +98,8 @@ function PulsePlanner() {
           loading={loading}
           error={error}
           onRegenerate={run}
-          emptyHint="Your time-blocked plan appears here with P1–P3 priorities and a risks section — tweak any block before you commit to it."
+          onReset={resetOutput}
+          emptyHint="Your schedule appears here as a prioritized, time-blocked plan — daily or weekly, with High/Moderate/Low priorities and a risks section."
           disclaimer={DISCLAIMER}
         />
       </div>
