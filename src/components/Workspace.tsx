@@ -87,6 +87,7 @@ export function InputPanel({
   loading,
   disabled,
   actionLabel,
+  onReset,
 }: {
   title: string;
   subtitle: string;
@@ -95,6 +96,7 @@ export function InputPanel({
   loading: boolean;
   disabled: boolean;
   actionLabel: string;
+  onReset?: () => void;
 }) {
   return (
     <section className="animate-slide-up w-full space-y-6 lg:col-span-5">
