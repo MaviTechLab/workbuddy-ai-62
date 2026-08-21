@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 const NAV = [
   { to: "/", label: "Smart Email Generator", short: "Email" },
-  { to: "/summarizer", label: "Minute Master", short: "Notes" },
+  { to: "/summarizer", label: "Meeting Notes Summariser", short: "Notes" },
   { to: "/planner", label: "Pulse Planner", short: "Plan" },
 ] as const;
 
