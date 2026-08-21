@@ -7,44 +7,49 @@ import {
   Field,
   InputPanel,
   OutputPanel,
-  Select,
   TextArea,
-  TextInput,
 } from "@/components/Workspace";
 import { generateAssistantOutput } from "@/lib/assistant.functions";
 
 export const Route = createFileRoute("/summarizer")({
   head: () => ({
     meta: [
-      { title: "Minute Master | Meeting Notes Summarizer" },
+      { title: "Meeting Notes Summariser | AI Workplace Productivity Assistant" },
       {
         name: "description",
         content:
-          "Turn long meeting notes into a short briefing with decisions, owner-tagged action items and deadlines you can edit.",
+          "Turn long meeting notes or transcripts into a clear briefing with decisions, owner-tagged action items and deadlines.",
       },
-      { property: "og:title", content: "Minute Master | Meeting Notes Summarizer" },
+      { property: "og:title", content: "Meeting Notes Summariser | AI Workplace Productivity Assistant" },
       {
         property: "og:description",
         content:
-          "Turn long meeting notes into a short briefing with decisions, owner-tagged action items and deadlines you can edit.",
+          "Turn long meeting notes or transcripts into a clear briefing with decisions, owner-tagged action items and deadlines.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: MinuteMaster,
+  component: MeetingNotesSummariser,
 });
 
-const DETAIL = ["Brief", "Balanced", "Thorough"] as const;
-
-function MinuteMaster() {
+function MeetingNotesSummariser() {
   const generate = useServerFn(generateAssistantOutput);
   const [notes, setNotes] = useState("");
-  const [title, setTitle] = useState("");
-  const [detail, setDetail] = useState<string>("Balanced");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const resetAll = () => {
+    setNotes("");
+    setOutput("");
+    setError(null);
+  };
+
+  const resetOutput = () => {
+    setOutput("");
+    setError(null);
+  };
 
   const run = async () => {
     if (!notes.trim()) return;
@@ -52,7 +57,7 @@ function MinuteMaster() {
     setError(null);
     try {
       const result = await generate({
-        data: { tool: "summary", input: notes, options: { title, detail } },
+        data: { tool: "summary", input: notes, options: {} },
       });
       setOutput(result.text);
     } catch (e) {
@@ -66,30 +71,22 @@ function MinuteMaster() {
     <AppShell>
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-8 lg:grid lg:grid-cols-12">
         <InputPanel
-          title="Summarize meeting notes"
-          subtitle="Paste raw notes or a transcript — get decisions, actions and deadlines."
+          title="Summarise meeting notes"
+          subtitle="Paste raw notes or a transcript — the AI will infer the meeting title and detail level."
           onGenerate={run}
           loading={loading}
           disabled={!notes.trim()}
-          actionLabel="Summarize Notes"
+          actionLabel="Summarise Notes"
+          onReset={resetAll}
         >
           <Field label="Raw Notes / Transcript">
             <TextArea
-              rows={12}
+              rows={14}
               value={notes}
               onChange={setNotes}
-              placeholder="Paste the full transcript or your rough bullet notes from the meeting…"
+              placeholder="Paste the full transcript or your rough bullet notes from the meeting. The AI will detect the meeting title and choose a brief, balanced or thorough summary based on the content."
             />
           </Field>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Meeting Title">
-              <TextInput value={title} onChange={setTitle} placeholder="Q3 planning sync" />
-            </Field>
-            <Field label="Detail Level">
-              <Select value={detail} onChange={setDetail} options={DETAIL} />
-            </Field>
-          </div>
         </InputPanel>
 
         <OutputPanel
@@ -99,6 +96,7 @@ function MinuteMaster() {
           loading={loading}
           error={error}
           onRegenerate={run}
+          onReset={resetOutput}
           emptyHint="Your briefing appears here with SUMMARY, DECISIONS, ACTION ITEMS, DEADLINES and OPEN QUESTIONS — all editable before you circulate it."
           disclaimer={DISCLAIMER}
         />
@@ -106,3 +104,4 @@ function MinuteMaster() {
     </AppShell>
   );
 }
+
