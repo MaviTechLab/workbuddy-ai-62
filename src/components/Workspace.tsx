@@ -138,6 +138,7 @@ export function OutputPanel({
   error,
   emptyHint,
   onRegenerate,
+  onReset,
   disclaimer,
 }: {
   badge: string;
@@ -147,6 +148,7 @@ export function OutputPanel({
   error: string | null;
   emptyHint: string;
   onRegenerate: () => void;
+  onReset?: () => void;
   disclaimer: string;
 }) {
   const [copied, setCopied] = useState(false);
@@ -187,6 +189,15 @@ export function OutputPanel({
             >
               <span className="px-1">{copied ? "Copied" : "Copy"}</span>
             </button>
+            {onReset ? (
+              <button
+                onClick={onReset}
+                disabled={!value || loading}
+                className="rounded p-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground disabled:opacity-40"
+              >
+                <span className="px-1">Reset</span>
+              </button>
+            ) : null}
           </div>
         </div>
 
