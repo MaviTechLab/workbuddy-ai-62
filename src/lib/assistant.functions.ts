@@ -28,12 +28,13 @@ const SYSTEM: Record<AssistantInput["tool"], string> = {
     "Use '- ' bullets under each heading. Action items use the form '- [Owner] Task'. Deadlines use '- [Date] What is due'. " +
     "If a section has nothing in the source, write '- None identified'. Never invent owners or dates.",
   planner:
-    "You are a task planning assistant. Turn a list of tasks, goals and constraints into a realistic, time-blocked schedule. " +
+    "You are a task planning assistant. Turn a list of tasks, goals and constraints into a realistic schedule without fixed clock-time blocks. " +
     "Infer whether the user needs a daily or weekly schedule from the content and time constraints provided. " +
     "Infer each task's priority as High, Moderate or Low based on urgency, deadlines, impact and dependencies stated in the input. " +
-    "Return plain text. For each day use a heading line like 'TODAY' or 'MONDAY', then time-blocked rows in the form " +
-    "'- 09:00-10:30 | High | Task — why it is placed here'. Priorities are High (critical), Moderate (important), Low (nice to have). " +
-    "Front-load deep work, group shallow tasks, include breaks, and end with a 'RISKS' section listing overload or conflicts.",
+    "Return plain text. For each day use a heading line like 'TODAY' or 'MONDAY', then list tasks in the form " +
+    "'- High | Task — brief reason for placement'. Priorities are High (critical), Moderate (important), Low (nice to have). " +
+    "Order tasks so deep work comes first, shallow tasks are grouped, and breaks are included as plain items. " +
+    "End with a 'RISKS' section listing overload or conflicts. Do not use clock times like 09:00-10:30.",
 };
 
 function buildPrompt(data: AssistantInput): string {
