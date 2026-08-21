@@ -7,7 +7,6 @@ import {
   Field,
   InputPanel,
   OutputPanel,
-  Select,
   TextArea,
   TextInput,
 } from "@/components/Workspace";
@@ -16,33 +15,39 @@ import { generateAssistantOutput } from "@/lib/assistant.functions";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Email Architect | AI Workplace Productivity Assistant" },
+      { title: "Smart Email Generator | AI Workplace Productivity Assistant" },
       {
         name: "description",
         content:
-          "Generate professional emails in any tone — formal, friendly or persuasive — then edit the AI draft before you send it.",
+          "Paste or describe an email and the assistant matches the right tone and length automatically, then lets you edit the draft before sending.",
       },
-      { property: "og:title", content: "Email Architect | AI Workplace Productivity Assistant" },
+      {
+        property: "og:title",
+        content: "Smart Email Generator | AI Workplace Productivity Assistant",
+      },
       {
         property: "og:description",
         content:
-          "Generate professional emails in any tone — formal, friendly or persuasive — then edit the AI draft before you send it.",
+          "Paste or describe an email and the assistant matches the right tone and length automatically, then lets you edit the draft before sending.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: EmailArchitect,
+  component: SmartEmailGenerator,
 });
 
-const TONES = ["Professional", "Formal", "Friendly", "Persuasive", "Direct", "Apologetic"] as const;
-const LENGTHS = ["Concise", "Standard", "Detailed"] as const;
+const PLACEHOLDER = `Paste the email you received, or describe what you want to say…
 
-function EmailArchitect() {
+The assistant reads this box to decide:
+• Tone — formal, friendly, persuasive, apologetic or direct, matched to the pasted email or to how you describe it.
+• Email length — concise, standard or detailed, based on the depth of the context you provide.
+
+You can also state it outright, e.g. "reply in a friendly tone, keep it concise".`;
+
+function SmartEmailGenerator() {
   const generate = useServerFn(generateAssistantOutput);
   const [context, setContext] = useState("");
-  const [tone, setTone] = useState<string>("Professional");
-  const [length, setLength] = useState<string>("Standard");
   const [recipient, setRecipient] = useState("");
   const [sender, setSender] = useState("");
   const [output, setOutput] = useState("");
@@ -58,7 +63,7 @@ function EmailArchitect() {
         data: {
           tool: "email",
           input: context,
-          options: { tone, length, recipient, sender },
+          options: { recipient, sender },
         },
       });
       setOutput(result.text);
@@ -69,34 +74,28 @@ function EmailArchitect() {
     }
   };
 
+  const resetInputs = () => {
+    setContext("");
+    setRecipient("");
+    setSender("");
+    setError(null);
+  };
+
   return (
     <AppShell>
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-8 lg:grid lg:grid-cols-12">
         <InputPanel
-          title="Draft new response"
-          subtitle="Specify the context and tone for your AI assistant."
+          title="Draft email response"
+          subtitle="Paste or describe the email — tone and length are matched to your context automatically."
           onGenerate={run}
+          onReset={resetInputs}
           loading={loading}
           disabled={!context.trim()}
           actionLabel="Generate Draft"
         >
-          <Field label="Prompt Context">
-            <TextArea
-              rows={9}
-              value={context}
-              onChange={setContext}
-              placeholder="Paste the email you received, or describe what you want to say…"
-            />
+          <Field label="Email Context">
+            <TextArea rows={12} value={context} onChange={setContext} placeholder={PLACEHOLDER} />
           </Field>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Field label="Tone">
-              <Select value={tone} onChange={setTone} options={TONES} />
-            </Field>
-            <Field label="Length">
-              <Select value={length} onChange={setLength} options={LENGTHS} />
-            </Field>
-          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="Recipient">
@@ -115,6 +114,7 @@ function EmailArchitect() {
           loading={loading}
           error={error}
           onRegenerate={run}
+          onReset={() => setOutput("")}
           emptyHint="Your generated email appears here and stays fully editable — adjust wording, then copy it into your mail client."
           disclaimer={DISCLAIMER}
         />
